@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree view -->
+    <record id="mp_payment_fee_config_tree_view" model="ir.ui.view">
+        <field name="name">mp.payment.fee.config.tree</field>
+        <field name="model">mp.payment.fee.config</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="payment_method"/>
+                <field name="fee_percentage"/>
+                <field name="fee_fixed"/>
+                <field name="is_active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="mp_payment_fee_config_form_view" model="ir.ui.view">
+        <field name="name">mp.payment.fee.config.form</field>
+        <field name="model">mp.payment.fee.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="payment_method"/>
+                        <field name="is_active"/>
+                    </group>
+                    <group>
+                        <field name="fee_percentage" string="Porcentaje de fee (%)"/>
+                        <field name="fee_fixed" string="Fee fijo ($)"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="mp_payment_fee_config_action" model="ir.actions.act_window">
+        <field name="name">Configuración de fees</field>
+        <field name="res_model">mp.payment.fee.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help">Configura los fees de MercadoPago por método de pago. Los cambios aplican inmediatamente a nuevos pagos.</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        id="menu_mp_payment_fee_config"
+        name="Configuración de fees"
+        parent="br_service_order.menu_br_root"
+        action="mp_payment_fee_config_action"
+        sequence="50"
+    />
+
+</odoo>

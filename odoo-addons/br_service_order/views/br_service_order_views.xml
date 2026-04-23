@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Secuencia para numeración automática -->
+  <record id="seq_br_service_order" model="ir.sequence">
+    <field name="name">Orden de Servicio BR</field>
+    <field name="code">br.service.order</field>
+    <field name="prefix">BR-</field>
+    <field name="padding">4</field>
+    <field name="number_next">1</field>
+    <field name="number_increment">1</field>
+  </record>
+
+  <!-- Vista formulario -->
+  <record id="view_br_service_order_form" model="ir.ui.view">
+    <field name="name">br.service.order.form</field>
+    <field name="model">br.service.order</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="action_autorizar_pago" string="Autorizar pago"
+            type="object" class="btn-primary"
+            invisible="state != 'solicitud_creada'"/>
+          <button name="action_buscar_proveedor" string="Buscar proveedor"
+            type="object" class="btn-primary"
+            invisible="state != 'pago_autorizado'"/>
+          <button name="action_asignar_proveedor" string="Asignar proveedor"
+            type="object" class="btn-primary"
+            invisible="state != 'buscando_proveedor'"/>
+          <button name="action_en_camino" string="En camino"
+            type="object" class="btn-primary"
+            invisible="state != 'proveedor_asignado'"/>
+          <button name="action_llego" string="Llegó"
+            type="object" class="btn-primary"
+            invisible="state != 'en_camino'"/>
+          <button name="action_trabajo_completado" string="Trabajo completado"
+            type="object" class="btn-primary"
+            invisible="state != 'llego'"/>
+          <button name="action_liberar_pago" string="Liberar pago"
+            type="object" class="btn-primary"
+            invisible="state != 'trabajo_completado'"/>
+          <button name="action_completar" string="Completar"
+            type="object" class="btn-primary"
+            invisible="state != 'pago_liberado'"/>
+          <button name="action_cancelar" string="Cancelar"
+            type="object" class="btn-danger"
+            invisible="state not in ('solicitud_creada','pago_autorizado','buscando_proveedor','proveedor_asignado')"/>
+          <button name="action_abrir_disputa" string="Abrir disputa"
+            type="object" class="btn-warning"
+            invisible="state != 'trabajo_completado'"/>
+          <field name="state" widget="statusbar"
+            statusbar_visible="solicitud_creada,pago_autorizado,buscando_proveedor,proveedor_asignado,en_camino,llego,trabajo_completado,pago_liberado,completado"/>
+        </header>
+        <sheet>
+          <div class="oe_title">
+            <h1><field name="name" readonly="1"/></h1>
+          </div>
+          <group>
+            <group string="Partes">
+              <field name="client_id"/>
+              <field name="provider_id"/>
+            </group>
+            <group string="Servicio">
+              <field name="rubro"/>
+              <field name="service_type"/>
+              <field name="payment_method"/>
+              <field name="amount"/>
+            </group>
+          </group>
+          <group>
+            <group string="Agenda">
+              <field name="scheduled_date"/>
+              <field name="franja"/>
+            </group>
+            <group string="Calificación">
+              <field name="rating"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Descripción">
+              <field name="description"
+                placeholder="Descripción del trabajo solicitado..."/>
+            </page>
+            <page string="Fotos">
+              <group>
+                <field name="photo_before" widget="image"/>
+                <field name="photo_after" widget="image"/>
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+<!-- Vista lista -->
+  <record id="view_br_service_order_list" model="ir.ui.view">
+    <field name="name">br.service.order.list</field>
+    <field name="model">br.service.order</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="client_id"/>
+        <field name="provider_id"/>
+        <field name="rubro"/>
+        <field name="service_type"/>
+        <field name="scheduled_date"/>
+        <field name="amount"/>
+        <field name="state" widget="badge"
+          decoration-info="state == 'solicitud_creada'"
+          decoration-warning="state in ('buscando_proveedor', 'sin_match')"
+          decoration-success="state == 'completado'"
+          decoration-danger="state in ('cancelado', 'disputa_abierta')"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Vista Kanban -->
+  <record id="view_br_service_order_kanban" model="ir.ui.view">
+    <field name="name">br.service.order.kanban</field>
+    <field name="model">br.service.order</field>
+    <field name="arch" type="xml">
+      <kanban default_group_by="state">
+        <field name="name"/>
+        <field name="client_id"/>
+        <field name="provider_id"/>
+        <field name="rubro"/>
+        <field name="amount"/>
+        <field name="state"/>
+        <templates>
+          <t t-name="kanban-box">
+            <div class="oe_kanban_card oe_kanban_global_click">
+              <strong><field name="name"/></strong>
+              <div>Cliente: <field name="client_id"/></div>
+              <div>Rubro: <field name="rubro"/></div>
+              <div>Monto: $<field name="amount"/></div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <!-- Acción -->
+  <record id="action_br_service_order" model="ir.actions.act_window">
+    <field name="name">Órdenes de Servicio</field>
+    <field name="res_model">br.service.order</field>
+    <field name="view_mode">kanban,list,form</field>
+  </record>
+
+</odoo>

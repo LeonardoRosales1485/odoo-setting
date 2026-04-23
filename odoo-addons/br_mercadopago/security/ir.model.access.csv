@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mp_payment_fee_config,mp.payment.fee.config admin,model_mp_payment_fee_config,,1,1,1,1
+access_br_payment,br.payment admin,model_br_payment,,1,1,1,1

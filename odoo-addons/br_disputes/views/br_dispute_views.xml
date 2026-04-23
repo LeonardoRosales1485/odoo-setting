@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="view_br_dispute_form" model="ir.ui.view">
+    <field name="name">br.dispute.form</field>
+    <field name="model">br.dispute</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="action_iniciar_revision" string="Iniciar revisión"
+            type="object" class="btn-primary"
+            invisible="estado != 'abierta'"/>
+          <button name="action_resolver_reembolso" string="Resolver: reembolso"
+            type="object" class="btn-warning"
+            invisible="estado not in ('abierta','en_revision')"/>
+          <button name="action_resolver_sin_reembolso" string="Resolver: sin reembolso"
+            type="object" class="btn-primary"
+            invisible="estado not in ('abierta','en_revision')"/>
+          <button name="action_resolver_re_servicio" string="Resolver: re-servicio"
+            type="object" class="btn-secondary"
+            invisible="estado not in ('abierta','en_revision')"/>
+          <button name="action_cerrar" string="Cerrar"
+            type="object" class="btn-secondary"
+            invisible="estado != 'resuelta'"/>
+          <field name="estado" widget="statusbar" statusbar_visible="abierta,en_revision,resuelta,cerrada"/>
+        </header>
+        <sheet>
+          <div class="oe_title">
+            <h1><field name="name" readonly="1"/></h1>
+          </div>
+          <group>
+            <group string="Contexto">
+              <field name="order_id"/>
+              <field name="cliente_id" readonly="1"/>
+              <field name="proveedor_id" readonly="1"/>
+              <field name="monto_orden" readonly="1"/>
+            </group>
+            <group string="SLA">
+              <field name="fecha_apertura" readonly="1"/>
+              <field name="fecha_limite" readonly="1"/>
+              <field name="alerta_sla" readonly="1"/>
+              <field name="asignado_a"/>
+            </group>
+          </group>
+          <group>
+            <field name="motivo"/>
+            <field name="resolucion" readonly="1"/>
+            <field name="fecha_resolucion" readonly="1"/>
+            <field name="notas_resolucion"/>
+          </group>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_br_dispute_list" model="ir.ui.view">
+    <field name="name">br.dispute.list</field>
+    <field name="model">br.dispute</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="order_id"/>
+        <field name="cliente_id"/>
+        <field name="proveedor_id"/>
+        <field name="fecha_apertura"/>
+        <field name="fecha_limite"/>
+        <field name="alerta_sla" column_invisible="1"/>
+        <field name="estado" widget="badge"
+          decoration-warning="estado == 'en_revision'"
+          decoration-danger="alerta_sla"
+          decoration-success="estado in ('resuelta','cerrada')"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_br_dispute" model="ir.actions.act_window">
+    <field name="name">Disputas</field>
+    <field name="res_model">br.dispute</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+</odoo>

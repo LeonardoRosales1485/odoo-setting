@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <record id="seq_br_liquidation" model="ir.sequence">
+      <field name="name">Liquidación BR</field>
+      <field name="code">br.liquidation</field>
+      <field name="prefix">LIQ-</field>
+      <field name="padding">4</field>
+      <field name="number_next">1</field>
+      <field name="number_increment">1</field>
+    </record>
+
+    <!-- Jueves 18:00 UTC-3 = 21:00 UTC -->
+    <record id="cron_br_liquidacion_semanal" model="ir.cron">
+      <field name="name">BR Liquidación semanal (jueves)</field>
+      <field name="model_id" ref="model_br_liquidation"/>
+      <field name="state">code</field>
+      <field name="code">model.cron_liquidacion_semanal()</field>
+      <field name="interval_number">1</field>
+      <field name="interval_type">weeks</field>
+      <field name="numbercall">-1</field>
+      <field name="active">True</field>
+    </record>
+
+  </data>
+</odoo>

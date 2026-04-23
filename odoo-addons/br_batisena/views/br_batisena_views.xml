@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Vista lista -->
+  <record id="view_br_queue_entry_tree" model="ir.ui.view">
+    <field name="name">br.queue.entry.tree</field>
+    <field name="model">br.queue.entry</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="order_id"/>
+        <field name="provider_id"/>
+        <field name="priority_score"/>
+        <field name="status"/>
+        <field name="offered_at"/>
+        <field name="expires_at"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Vista formulario -->
+  <record id="view_br_queue_entry_form" model="ir.ui.view">
+    <field name="name">br.queue.entry.form</field>
+    <field name="model">br.queue.entry</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="action_accept" string="Aceptar trabajo"
+            type="object" class="btn-primary"
+            invisible="status != 'waiting'"/>
+          <button name="action_expire" string="Marcar expirado"
+            type="object" class="btn-warning"
+            invisible="status != 'waiting'"/>
+          <field name="status" widget="statusbar"
+            statusbar_visible="waiting,accepted,expired"/>
+        </header>
+        <sheet>
+          <group>
+            <group string="Orden">
+              <field name="order_id"/>
+              <field name="provider_id"/>
+            </group>
+            <group string="Score">
+              <field name="provider_score"/>
+              <field name="priority_score"/>
+            </group>
+          </group>
+          <group>
+            <group string="Tiempos">
+              <field name="offered_at"/>
+              <field name="expires_at"/>
+            </group>
+            <group string="Estado">
+              <field name="status"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Accion -->
+  <record id="action_br_queue_entry" model="ir.actions.act_window">
+    <field name="name">Cola Batisena</field>
+    <field name="res_model">br.queue.entry</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+</odoo>

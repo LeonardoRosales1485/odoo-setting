@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(docker exec -it odoo-br python3 -m odoo.cli.main -c etc/odoo.conf -d botonrojo -i br_mercadopago --stop-after-init)",
+      "PowerShell(docker exec odoo-br python3 -m odoo.cli.main -c etc/odoo.conf -d botonrojo -i br_mercadopago --stop-after-init 2>&1)",
+      "PowerShell(tee install.log)",
+      "PowerShell(docker exec odoo-br odoo -c etc/odoo.conf -d botonrojo -i br_mercadopago --stop-after-init 2>&1)",
+      "PowerShell(docker exec odoo-br ls -la /opt/odoo/)",
+      "PowerShell(head -20)",
+      "Bash(python3 -m py_compile C:/botonrojo/addons/br_mercadopago/models/mp_config.py)",
+      "Bash(chmod +x /c/botonrojo/scripts/setup-server.sh)",
+      "Bash(git init *)",
+      "Bash(git config *)",
+      "Bash(git remote *)",
+      "Bash(git fetch *)",
+      "Bash(git ls-tree *)",
+      "Bash(git branch *)",
+      "Bash(git pull *)",
+      "Bash(mkdir -p /tmp/botonrojo-backup)",
+      "Bash(cp -r . /tmp/botonrojo-backup/)",
+      "Bash(git reset *)",
+      "Bash(rm -rf odoo-addons/*)",
+      "Bash(cp -r /tmp/botonrojo-backup/addons/* odoo-addons/)",
+      "Bash(cp /tmp/botonrojo-backup/Dockerfile .)",
+      "Bash(cp /tmp/botonrojo-backup/docker-compose.yml .)",
+      "Bash(cp /tmp/botonrojo-backup/.dockerignore .)",
+      "Bash(cp /tmp/botonrojo-backup/.env.example .)",
+      "Bash(cp -r /tmp/botonrojo-backup/scripts .)",
+      "Bash(cp /tmp/botonrojo-backup/MERCADOPAGO_*.md .)",
+      "Bash(cp /tmp/botonrojo-backup/SETUP_GCP_SIMPLE.md .)",
+      "Bash(cp /tmp/botonrojo-backup/CIRCLECI_DEPLOYMENT.md .)",
+      "Bash(cp /tmp/botonrojo-backup/DEPLOYMENT_*.md .)",
+      "Bash(cp /tmp/botonrojo-backup/README_MERCADOPAGO.md .)",
+      "Bash(cp /tmp/botonrojo-backup/botonrojo_handoff.md .)",
+      "Bash(cp /tmp/botonrojo-backup/.gitignore .gitignore.local)",
+      "Bash(grep -E \"\\\\.md$|\\\\.yml$|Dockerfile|docker-compose\")",
+      "Bash(git add *)"
+    ]
+  }
+}

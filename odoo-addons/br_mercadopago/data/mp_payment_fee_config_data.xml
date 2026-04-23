@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Configuración de fees por método de pago -->
+    <record id="mp_fee_credit_card" model="mp.payment.fee.config">
+        <field name="payment_method">credit_card</field>
+        <field name="fee_percentage">2.9</field>
+        <field name="fee_fixed">0.30</field>
+        <field name="is_active">True</field>
+    </record>
+
+    <record id="mp_fee_debit_card" model="mp.payment.fee.config">
+        <field name="payment_method">debit_card</field>
+        <field name="fee_percentage">1.99</field>
+        <field name="fee_fixed">0.30</field>
+        <field name="is_active">True</field>
+    </record>
+
+    <record id="mp_fee_transfer" model="mp.payment.fee.config">
+        <field name="payment_method">transfer</field>
+        <field name="fee_percentage">1.45</field>
+        <field name="fee_fixed">0.00</field>
+        <field name="is_active">True</field>
+    </record>
+
+    <record id="mp_fee_wallet" model="mp.payment.fee.config">
+        <field name="payment_method">wallet</field>
+        <field name="fee_percentage">1.49</field>
+        <field name="fee_fixed">0.00</field>
+        <field name="is_active">True</field>
+    </record>
+
+    <record id="mp_fee_other" model="mp.payment.fee.config">
+        <field name="payment_method">other</field>
+        <field name="fee_percentage">2.9</field>
+        <field name="fee_fixed">0.30</field>
+        <field name="is_active">True</field>
+    </record>
+
+</odoo>

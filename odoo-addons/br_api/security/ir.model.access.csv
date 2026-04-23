@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_br_otp_admin,br.otp admin,model_br_otp,,1,1,1,1
+access_br_api_key_admin,br.api.key admin,model_br_api_key,,1,1,1,1
+access_br_api_token_admin,br.api.token admin,model_br_api_token,,1,1,1,1

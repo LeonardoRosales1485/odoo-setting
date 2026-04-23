@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- API Keys -->
+  <record id="view_br_api_key_form" model="ir.ui.view">
+    <field name="name">br.api.key.form</field>
+    <field name="model">br.api.key</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="api_key"/>
+            <field name="webhook_url"/>
+            <field name="is_active"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_br_api_key_tree" model="ir.ui.view">
+    <field name="name">br.api.key.tree</field>
+    <field name="model">br.api.key</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="api_key"/>
+        <field name="webhook_url"/>
+        <field name="is_active"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_br_api_key" model="ir.actions.act_window">
+    <field name="name">API Keys</field>
+    <field name="res_model">br.api.key</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <!-- Tokens -->
+  <record id="view_br_api_token_tree" model="ir.ui.view">
+    <field name="name">br.api.token.tree</field>
+    <field name="model">br.api.token</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="partner_id"/>
+        <field name="role"/>
+        <field name="expires_at"/>
+        <field name="is_active"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_br_api_token" model="ir.actions.act_window">
+    <field name="name">Tokens activos</field>
+    <field name="res_model">br.api.token</field>
+    <field name="view_mode">tree</field>
+    <field name="domain">[('is_active', '=', True)]</field>
+  </record>
+
+  <!-- OTPs -->
+  <record id="view_br_otp_form" model="ir.ui.view">
+    <field name="name">br.otp.form</field>
+    <field name="model">br.otp</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="phone"/>
+            <field name="otp_code"/>
+            <field name="expires_at"/>
+            <field name="used"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_br_otp_tree" model="ir.ui.view">
+    <field name="name">br.otp.tree</field>
+    <field name="model">br.otp</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="phone"/>
+        <field name="otp_code"/>
+        <field name="expires_at"/>
+        <field name="used"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_br_otp" model="ir.actions.act_window">
+    <field name="name">OTPs</field>
+    <field name="res_model">br.otp</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+</odoo>

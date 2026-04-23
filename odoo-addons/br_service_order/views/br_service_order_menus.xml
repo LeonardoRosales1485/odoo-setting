@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <menuitem id="menu_br_root"
+    name="Botón Rojo"
+    sequence="10"/>
+
+  <menuitem id="menu_br_orders"
+    name="Órdenes de Servicio"
+    parent="menu_br_root"
+    action="br_service_order.action_br_service_order"
+    sequence="10"/>
+
+</odoo>

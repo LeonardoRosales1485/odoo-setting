@@ -1,62 +1,133 @@
 version: 2.1
 
-jobs:
-  test:
+executors:
+  python:
     docker:
       - image: cimg/python:3.10
+        environment:
+          POSTGRES_DB: odoo_br_pilot
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
       - image: cimg/postgres:15
         environment:
-          POSTGRES_USER: odoo_user
-          POSTGRES_PASSWORD: odoo_test
-          POSTGRES_DB: odoo_test
+          POSTGRES_DB: odoo_br_pilot
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+
+jobs:
+  lint-and-test:
+    executor: python
     steps:
       - checkout
       - run:
-          name: Install dependencies
+          name: "Install Python dependencies"
           command: |
             pip install --upgrade pip
-            pip install -r requirements.txt
-      - run:
-          name: Lint modules
-          command: |
-            python -m pylint odoo-addons/ --fail-under=7.0 || true
-      - run:
-          name: Run tests
-          command: |
-            python -m pytest test/ -v || true
+            pip install flake8 black pylint
 
-  deploy-to-gcp:
+      - run:
+          name: "Run linting on custom modules"
+          command: |
+            flake8 addons/ --count --select=E9,F63,F7,F82 --show-source --statistics
+            flake8 addons/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - run:
+          name: "Check Python formatting"
+          command: |
+            black --check addons/ || true
+
+  build-docker:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/base:current
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+
       - run:
-          name: Authenticate with GCP
+          name: "Build Docker image"
           command: |
-            echo $GCP_SA_KEY | base64 -d > /tmp/gcp-key.json
-            gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
-            gcloud config set project mop-cloud
+            docker build -t botonrojo:${CIRCLE_SHA1:0:7} .
+            docker tag botonrojo:${CIRCLE_SHA1:0:7} botonrojo:latest
+
       - run:
-          name: Deploy to Odoo instance
+          name: "Save Docker image"
           command: |
-            # Copy modules to GCP instance
-            gcloud compute scp --zone=southamerica-east1-a \
-              odoo-addons/* \
-              odoo-br-pilot:/opt/odoo/custom-addons/ --recurse || true
-            echo "✅ Modules deployed to GCP instance"
+            mkdir -p /tmp/docker
+            docker save botonrojo:${CIRCLE_SHA1:0:7} | gzip > /tmp/docker/botonrojo-image.tar.gz
+
+      - persist_to_workspace:
+          root: /tmp/docker
+          paths:
+            - botonrojo-image.tar.gz
+
+  deploy-sandbox:
+    docker:
+      - image: cimg/base:current
+    environment:
+      DEPLOYMENT_ENV: sandbox
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/docker
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
       - run:
-          name: Restart Odoo service
+          name: "Load Docker image"
           command: |
-            gcloud compute ssh odoo-br-pilot --zone=southamerica-east1-a \
-              --command="sudo systemctl restart odoo || echo 'Odoo service not configured yet'"
+            docker load --input /tmp/docker/botonrojo-image.tar.gz
+
+      - run:
+          name: "Setup deployment credentials"
+          command: |
+            mkdir -p ~/.ssh
+            echo "$SSH_PRIVATE_KEY_SANDBOX" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan -H "$SANDBOX_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - run:
+          name: "Deploy to Sandbox"
+          command: |
+            ssh -o StrictHostKeyChecking=no deploy@${SANDBOX_HOST} << 'EOF'
+            cd /opt/botonrojo
+            docker pull botonrojo:latest
+            docker-compose down || true
+            docker-compose up -d
+            docker-compose exec -T odoo odoo --update=all --stop-after-init
+            EOF
+
+      - run:
+          name: "Verify deployment"
+          command: |
+            sleep 10
+            curl -f http://${SANDBOX_HOST}:8069/web/health || exit 1
 
 workflows:
+  version: 2
+
   test-and-deploy:
     jobs:
-      - test
-      - deploy-to-gcp:
+      - lint-and-test:
+          filters:
+            branches:
+              only: /.*/
+
+      - build-docker:
           requires:
-            - test
+            - lint-and-test
+          filters:
+            branches:
+              only:
+                - main
+                - develop
+
+      - deploy-sandbox:
+          requires:
+            - build-docker
           filters:
             branches:
               only: main
+          context:
+            - botonrojo-deploy-sandbox

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <menuitem id="menu_br_liquidation"
+    name="Liquidaciones"
+    parent="br_service_order.menu_br_root"
+    action="br_liquidation.action_br_liquidation"
+    sequence="50"/>
+
+</odoo>

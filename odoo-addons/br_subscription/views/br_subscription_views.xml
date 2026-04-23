@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="view_br_subscription_form" model="ir.ui.view">
+    <field name="name">br.subscription.form</field>
+    <field name="model">br.subscription</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="action_generar_orden" string="Generar orden ahora"
+            type="object" class="btn-primary"
+            invisible="estado != 'activa'"/>
+          <button name="action_pausar" string="Pausar"
+            type="object" class="btn-secondary"
+            invisible="estado != 'activa'"/>
+          <button name="action_reactivar" string="Reactivar"
+            type="object" class="btn-primary"
+            invisible="estado != 'pausada'"/>
+          <button name="action_cancelar" string="Cancelar"
+            type="object" class="btn-danger"
+            invisible="estado == 'cancelada'"/>
+          <field name="estado" widget="statusbar" statusbar_visible="activa,pausada,cancelada"/>
+        </header>
+        <sheet>
+          <div class="oe_title">
+            <h1><field name="name" readonly="1"/></h1>
+          </div>
+          <group>
+            <group string="Cliente y proveedor">
+              <field name="cliente_id"/>
+              <field name="proveedor_id"/>
+              <field name="rubro"/>
+            </group>
+            <group string="Condiciones">
+              <field name="precio_fijo"/>
+              <field name="frecuencia"/>
+              <field name="payment_method"/>
+              <field name="franja"/>
+            </group>
+          </group>
+          <group>
+            <group>
+              <field name="proximo_vencimiento"/>
+              <field name="cantidad_ordenes" readonly="1"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Órdenes">
+              <field name="orden_ids" readonly="1">
+                <tree>
+                  <field name="name"/>
+                  <field name="scheduled_date"/>
+                  <field name="amount"/>
+                  <field name="state"/>
+                </tree>
+              </field>
+            </page>
+            <page string="Notas">
+              <field name="notas"/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_br_subscription_list" model="ir.ui.view">
+    <field name="name">br.subscription.list</field>
+    <field name="model">br.subscription</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="cliente_id"/>
+        <field name="rubro"/>
+        <field name="frecuencia"/>
+        <field name="precio_fijo"/>
+        <field name="proximo_vencimiento"/>
+        <field name="estado" widget="badge"
+          decoration-success="estado == 'activa'"
+          decoration-warning="estado == 'pausada'"
+          decoration-danger="estado == 'cancelada'"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_br_subscription" model="ir.actions.act_window">
+    <field name="name">Suscripciones</field>
+    <field name="res_model">br.subscription</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+</odoo>

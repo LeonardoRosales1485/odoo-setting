@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_br_liquidation_admin,br.liquidation admin,model_br_liquidation,,1,1,1,1
+access_br_liquidation_line_admin,br.liquidation.line admin,model_br_liquidation_line,,1,1,1,1

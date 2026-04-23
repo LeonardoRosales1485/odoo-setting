@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Vista formulario pago -->
+  <record id="view_br_payment_form" model="ir.ui.view">
+    <field name="name">br.payment.form</field>
+    <field name="model">br.payment</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="action_authorize" string="Autorizar"
+            type="object" class="btn-primary"
+            invisible="status != 'pending'"/>
+          <button name="action_capture" string="Capturar"
+            type="object" class="btn-primary"
+            invisible="status != 'authorized'"/>
+          <button name="action_cancel" string="Cancelar"
+            type="object" class="btn-danger"
+            invisible="status not in ('pending', 'authorized')"/>
+          <button name="action_refund" string="Reembolsar"
+            type="object" class="btn-warning"
+            invisible="status != 'captured'"/>
+          <field name="status"/>
+        </header>
+        <sheet>
+          <group>
+            <group string="Orden">
+              <field name="order_id"/>
+              <field name="payment_method"/>
+              <field name="amount"/>
+            </group>
+            <group string="Split">
+              <field name="provider_split"/>
+              <field name="br_split"/>
+            </group>
+          </group>
+          <group>
+            <group string="MercadoPago">
+              <field name="mp_payment_method"/>
+              <field name="mp_payment_id"/>
+              <field name="mp_preference_id"/>
+              <field name="mp_payment_link" widget="url"/>
+            </group>
+            <group string="Fees">
+              <field name="mp_fee_percentage"/>
+              <field name="mp_fee_fixed"/>
+              <field name="mp_fee_amount"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Respuesta MP">
+              <field name="mp_raw_response"/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Vista lista pagos -->
+  <record id="view_br_payment_tree" model="ir.ui.view">
+    <field name="name">br.payment.tree</field>
+    <field name="model">br.payment</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="order_id"/>
+        <field name="payment_method"/>
+        <field name="amount"/>
+        <field name="mp_fee_amount"/>
+        <field name="provider_split"/>
+        <field name="br_split"/>
+        <field name="mp_payment_id"/>
+        <field name="status" widget="badge"
+          decoration-warning="status == 'authorized'"
+          decoration-success="status == 'captured'"
+          decoration-danger="status in ('cancelled', 'refunded')"
+          />
+      </tree>
+    </field>
+  </record>
+
+  <!-- Acción pagos -->
+  <record id="action_br_payment" model="ir.actions.act_window">
+    <field name="name">Pagos MP</field>
+    <field name="res_model">br.payment</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <!-- Vista lista cobrador (Flow B efectivo) -->
+  <record id="view_br_cobrador_tree" model="ir.ui.view">
+    <field name="name">br.service.order.cobrador.tree</field>
+    <field name="model">br.service.order</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="client_id"/>
+        <field name="rubro"/>
+        <field name="amount"/>
+        <field name="cobrador_id"/>
+        <field name="cash_collected_at"/>
+        <field name="cash_collected_amount"/>
+        <field name="state" widget="badge"
+          decoration-warning="state == 'pendiente_cobro_efvo'"
+          decoration-success="state == 'completado'"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Acción cobrador -->
+  <record id="action_br_cobrador" model="ir.actions.act_window">
+    <field name="name">Cobros Efectivo</field>
+    <field name="res_model">br.service.order</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('payment_method', '=', 'efectivo')]</field>
+  </record>
+
+  <!-- Herencia vista formulario br.service.order — agrega pestaña pagos -->
+  <record id="view_br_service_order_form_payment" model="ir.ui.view">
+    <field name="name">br.service.order.form.payment</field>
+    <field name="model">br.service.order</field>
+    <field name="inherit_id" ref="br_service_order.view_br_service_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//form/header" position="inside">
+        <button name="action_create_payment" string="Crear/autorizar pago MP"
+          type="object" class="btn-primary"
+          invisible="payment_method != 'mp' or state not in ('solicitud_creada','pago_autorizado','buscando_proveedor','proveedor_asignado','en_camino','llego','trabajo_completado','pago_liberado','completado')"/>
+        <button name="action_view_payments" string="Ver pagos"
+          type="object" class="btn-secondary"
+          invisible="payment_count == 0"/>
+      </xpath>
+      <xpath expr="//notebook" position="inside">
+        <page string="Pagos">
+          <group>
+            <button name="action_create_payment" string="Crear/autorizar pago MP"
+              type="object" class="btn-primary"
+              invisible="payment_method != 'mp'"/>
+            <button name="action_view_payments" string="Ver pagos"
+              type="object" class="btn-secondary"
+              invisible="payment_count == 0"/>
+          </group>
+          <group>
+            <field name="payment_count" readonly="1"/>
+            <field name="cobrador_id"
+              invisible="payment_method != 'efectivo'"/>
+            <field name="cash_collected_at"
+              invisible="payment_method != 'efectivo'"/>
+            <field name="cash_collected_amount"
+              invisible="payment_method != 'efectivo'"/>
+          </group>
+          <field name="payment_ids" readonly="1">
+            <tree>
+              <field name="mp_payment_id"/>
+              <field name="amount"/>
+              <field name="provider_split"/>
+              <field name="br_split"/>
+              <field name="status" widget="badge"
+                decoration-warning="status == 'authorized'"
+                decoration-success="status == 'captured'"
+                decoration-danger="status in ('cancelled','refunded')"
+                />
+            </tree>
+          </field>
+        </page>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_br_score" model="ir.ui.view">
+        <field name="name">res.partner.form.br.score</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Botón Rojo" name="boton_rojo">
+                    <group string="Identificación">
+                        <field name="br_is_provider"/>
+                        <field name="br_level"/>
+                        <field name="br_suspended"/>
+                    </group>
+                    <group string="Score">
+                        <field name="br_score"/>
+                        <field name="br_jobs_completed"/>
+                    </group>
+                    <group string="Operativa">
+                        <field name="br_rubros"/>
+                        <field name="br_whatsapp"/>
+                        <field name="br_zona"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

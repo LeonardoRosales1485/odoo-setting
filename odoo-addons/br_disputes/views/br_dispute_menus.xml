@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <menuitem id="menu_br_disputes"
+    name="Disputas"
+    parent="br_service_order.menu_br_root"
+    action="br_disputes.action_br_dispute"
+    sequence="40"/>
+
+</odoo>

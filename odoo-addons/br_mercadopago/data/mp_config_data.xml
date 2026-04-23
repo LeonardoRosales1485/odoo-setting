@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Configuración inicial de MercadoPago (placeholder) -->
+  <record id="mp_config_default" model="mp.config">
+    <field name="name">Botón Rojo Principal</field>
+    <field name="seller_id">999999999</field>
+    <field name="access_token">TEST-TOKEN-PLACEHOLDER</field>
+    <field name="client_id">CLIENT-ID-PLACEHOLDER</field>
+    <field name="client_secret">CLIENT-SECRET-PLACEHOLDER</field>
+    <field name="api_url">https://api.mercadopago.com</field>
+    <field name="webhook_token">WEBHOOK-TOKEN-PLACEHOLDER</field>
+    <field name="br_commission_percentage">15.0</field>
+    <field name="provider_percentage">85.0</field>
+    <field name="is_active">True</field>
+    <field name="is_production">False</field>
+  </record>
+
+</odoo>

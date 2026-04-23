@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <menuitem id="menu_br_finanzas"
+    name="Finanzas"
+    parent="br_service_order.menu_br_root"
+    sequence="30"/>
+
+  <menuitem id="menu_br_payments"
+    name="Pagos MP"
+    parent="menu_br_finanzas"
+    action="action_br_payment"
+    sequence="10"/>
+
+  <menuitem id="menu_br_cobrador"
+    name="Cobros Efectivo"
+    parent="menu_br_finanzas"
+    action="action_br_cobrador"
+    sequence="20"/>
+
+</odoo>

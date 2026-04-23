@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <menuitem id="menu_br_config"
+    name="Configuración"
+    parent="br_service_order.menu_br_root"
+    sequence="90"/>
+
+  <menuitem id="menu_br_api_keys"
+    name="API Keys"
+    parent="menu_br_config"
+    action="action_br_api_key"
+    sequence="10"/>
+
+  <menuitem id="menu_br_api_tokens"
+    name="Tokens activos"
+    parent="menu_br_config"
+    action="action_br_api_token"
+    sequence="20"/>
+
+  <menuitem id="menu_br_otps"
+    name="OTPs"
+    parent="menu_br_config"
+    action="action_br_otp"
+    sequence="30"/>
+
+</odoo>

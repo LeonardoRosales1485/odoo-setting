@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Tree view para listado de configuraciones -->
+  <record id="mp_config_tree_view" model="ir.ui.view">
+    <field name="name">Configuración MP - Listado</field>
+    <field name="model">mp.config</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="seller_id"/>
+        <field name="api_url"/>
+        <field name="is_active"/>
+        <field name="is_production"/>
+        <field name="last_success"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Form view para edición -->
+  <record id="mp_config_form_view" model="ir.ui.view">
+    <field name="name">Configuración MP - Formulario</field>
+    <field name="model">mp.config</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <div class="oe_button_box" name="button_box">
+            <button name="test_connection" type="object" class="oe_stat_button" icon="fa-plug">
+              <span>Probar conexión</span>
+            </button>
+          </div>
+
+          <h1>
+            <field name="name" class="oe_inline"/>
+          </h1>
+
+          <group>
+            <group string="Credenciales MercadoPago">
+              <field name="seller_id" required="1"/>
+              <field name="access_token" password="1" required="1"/>
+              <field name="client_id" required="1"/>
+              <field name="client_secret" password="1" required="1"/>
+            </group>
+
+            <group string="Configuración">
+              <field name="api_url" required="1"/>
+              <field name="is_active"/>
+              <field name="is_production"/>
+              <field name="webhook_token"/>
+              <field name="webhook_url" readonly="1"/>
+            </group>
+          </group>
+
+          <group string="Split de pagos">
+            <field name="br_commission_percentage"/>
+            <field name="provider_percentage"/>
+          </group>
+
+          <group string="Estado">
+            <field name="last_success" readonly="1"/>
+            <field name="last_error" readonly="1" nolabel="1" colspan="2"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Action para abrir la lista -->
+  <record id="mp_config_action" model="ir.actions.act_window">
+    <field name="name">Configuración MercadoPago</field>
+    <field name="res_model">mp.config</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help">Configura las credenciales de MercadoPago para procesar pagos</field>
+  </record>
+
+  <!-- Menú -->
+  <menuitem
+    id="mp_config_menu"
+    name="Integración MP"
+    parent="br_service_order.menu_br_root"
+    action="mp_config_action"
+    sequence="100"/>
+
+</odoo>

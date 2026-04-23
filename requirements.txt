@@ -1,0 +1,39 @@
+# Odoo 17 Community Base
+# (Usually comes with Odoo installation)
+
+# API & Web Framework
+werkzeug>=2.3.0
+fastapi>=0.100.0
+pydantic>=2.0.0
+requests>=2.31.0
+
+# Database
+psycopg2-binary>=2.9.0
+
+# Data Processing
+lxml>=4.9.0
+pillow>=9.0.0
+reportlab>=4.0.0
+PyPDF2>=3.0.0
+
+# Date/Time
+python-dateutil>=2.8.0
+
+# Security
+passlib>=1.7.0
+cryptography>=40.0.0
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pylint>=2.17.0
+
+# GCP Integration
+google-cloud-firestore>=2.14.0
+google-cloud-storage>=2.10.0
+
+# MercadoPago
+mercadopago>=2.0.0
+
+# Utilities
+python-dotenv>=1.0.0

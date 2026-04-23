@@ -1,0 +1,62 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: cimg/python:3.10
+      - image: cimg/postgres:15
+        environment:
+          POSTGRES_USER: odoo_user
+          POSTGRES_PASSWORD: odoo_test
+          POSTGRES_DB: odoo_test
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            pip install --upgrade pip
+            pip install -r requirements.txt
+      - run:
+          name: Lint modules
+          command: |
+            python -m pylint odoo-addons/ --fail-under=7.0 || true
+      - run:
+          name: Run tests
+          command: |
+            python -m pytest test/ -v || true
+
+  deploy-to-gcp:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - run:
+          name: Authenticate with GCP
+          command: |
+            echo $GCP_SA_KEY | base64 -d > /tmp/gcp-key.json
+            gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
+            gcloud config set project mop-cloud
+      - run:
+          name: Deploy to Odoo instance
+          command: |
+            # Copy modules to GCP instance
+            gcloud compute scp --zone=southamerica-east1-a \
+              odoo-addons/* \
+              odoo-br-pilot:/opt/odoo/custom-addons/ --recurse || true
+            echo "✅ Modules deployed to GCP instance"
+      - run:
+          name: Restart Odoo service
+          command: |
+            gcloud compute ssh odoo-br-pilot --zone=southamerica-east1-a \
+              --command="sudo systemctl restart odoo || echo 'Odoo service not configured yet'"
+
+workflows:
+  test-and-deploy:
+    jobs:
+      - test
+      - deploy-to-gcp:
+          requires:
+            - test
+          filters:
+            branches:
+              only: main

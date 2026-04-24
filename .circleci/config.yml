@@ -34,8 +34,9 @@ jobs:
           name: Authenticate with GCP
           command: |
             echo $GCP_SA_KEY | base64 -d > /tmp/gcp-key.json
-            gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
-            gcloud config set project mop-cloud
+            gcloud auth activate-service-account --key-file=/tmp/gcp-key.json --quiet
+            gcloud config set project mop-cloud --quiet
+            gcloud compute config-ssh --project=mop-cloud --quiet || true
       - run:
           name: Deploy to Odoo instance
           command: |

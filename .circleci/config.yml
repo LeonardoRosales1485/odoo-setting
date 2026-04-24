@@ -90,7 +90,7 @@ jobs:
       - run:
           name: "Deploy to Sandbox"
           command: |
-            ssh -o StrictHostKeyChecking=no deploy@${SANDBOX_HOST} << 'EOF'
+            ssh -o StrictHostKeyChecking=no deploy@${SANDBOX_HOST} \<< 'EOF'
             cd /opt/botonrojo
             docker pull botonrojo:latest
             docker-compose down || true

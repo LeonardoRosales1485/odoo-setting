@@ -34,7 +34,10 @@
       "Bash(cp /tmp/botonrojo-backup/botonrojo_handoff.md .)",
       "Bash(cp /tmp/botonrojo-backup/.gitignore .gitignore.local)",
       "Bash(grep -E \"\\\\.md$|\\\\.yml$|Dockerfile|docker-compose\")",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m 'Merge Botón Rojo MercadoPago implementation with complete modules and deployment infrastructure *)",
+      "Bash(git push *)",
+      "Bash(git commit *)"
     ]
   }
 }

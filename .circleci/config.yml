@@ -8,7 +8,7 @@ executors:
           POSTGRES_DB: odoo_br_pilot
           POSTGRES_USER: odoo
           POSTGRES_PASSWORD: odoo
-      - image: cimg/postgres:15
+      - image: postgres:15
         environment:
           POSTGRES_DB: odoo_br_pilot
           POSTGRES_USER: odoo

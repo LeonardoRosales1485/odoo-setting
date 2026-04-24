@@ -27,7 +27,7 @@ jobs:
 
   deploy-to-gcp:
     docker:
-      - image: google/cloud-cli:latest
+      - image: google/cloud-sdk:latest
     steps:
       - checkout
       - run:

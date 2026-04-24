@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy custom addons
-COPY addons /mnt/extra-addons
+COPY odoo-addons /mnt/extra-addons
 
 # Set the addons path to include custom modules
 ENV ADDONS_PATH=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons

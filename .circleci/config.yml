@@ -28,13 +28,13 @@ jobs:
       - run:
           name: "Run linting on custom modules"
           command: |
-            flake8 addons/ --count --select=E9,F63,F7,F82 --show-source --statistics
-            flake8 addons/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+            flake8 odoo-addons/ --count --select=E9,F63,F7,F82 --show-source --statistics
+            flake8 odoo-addons/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
       - run:
           name: "Check Python formatting"
           command: |
-            black --check addons/ || true
+            black --check odoo-addons/ || true
 
   build-docker:
     docker:

@@ -27,16 +27,16 @@ services:
       db:
         condition: service_healthy
     environment:
-      HOST: ${DB_HOST:-db}
-      PORT: 5432
-      USER: ${DB_USER:-odoo}
-      PASSWORD: ${DB_PASSWORD:-odoo}
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-odoo_br_pilot}
+      DB_USER: ${DB_USER:-odoo}
+      DB_PASSWORD: ${DB_PASSWORD:-odoo}
       DBUSERPASSWORD: ${DB_PASSWORD:-odoo}
-      DB_FILTER: ${DB_FILTER:-.*}
       PGUSER: ${DB_USER:-odoo}
       ADDONS_PATH: /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
     volumes:
-      - ./addons:/mnt/extra-addons
+      - ./odoo-addons:/mnt/extra-addons
       - odoo_data:/var/lib/odoo
     ports:
       - "${ODOO_PORT:-8069}:8069"

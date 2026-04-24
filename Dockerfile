@@ -1,12 +1,5 @@
 FROM odoo:17
 
-# Install additional system dependencies if needed
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copy custom addons
 COPY odoo-addons /mnt/extra-addons
 

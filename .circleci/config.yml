@@ -27,7 +27,7 @@ jobs:
 
   deploy-to-gcp:
     docker:
-      - image: cimg/python:3.10
+      - image: google/cloud-cli:latest
     steps:
       - checkout
       - run:

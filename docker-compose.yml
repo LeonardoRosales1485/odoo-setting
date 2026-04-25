@@ -40,7 +40,7 @@ services:
       - odoo_data:/var/lib/odoo
     ports:
       - "${ODOO_PORT:-8069}:8069"
-    command: odoo -d ${DB_NAME:-odoo_br_pilot}
+    command: odoo -d ${DB_NAME:-odoo_br_pilot} --db_host=${DB_HOST:-db} --db_port=5432 --db_user=${DB_USER:-odoo} --db_password=${DB_PASSWORD:-odoo}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8069/web/health"]
       interval: 30s

@@ -78,3 +78,6 @@ yarn-error.log
 *.tmp
 *.temp
 .cache/
+
+# Claude Code internals
+.claude/worktrees/
